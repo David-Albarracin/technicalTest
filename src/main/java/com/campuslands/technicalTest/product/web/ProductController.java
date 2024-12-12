@@ -1,5 +1,5 @@
 
-package com.campuslands.technicalTest.category.web;
+package com.campuslands.technicalTest.product.web;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,57 +18,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.campuslands.technicalTest.category.domain.CategoryService;
-import com.campuslands.technicalTest.category.persistence.Category;
+import com.campuslands.technicalTest.product.domain.ProductService;
+import com.campuslands.technicalTest.product.persistence.Product;
 
 ;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryController {
+@RequestMapping("/product")
+public class ProductController {
 
     @Autowired
-    private CategoryService categoryService;
+    private ProductService productService;
 
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> view(@PathVariable Long id){
-        Optional<Category> optionalCategory  = categoryService.findById(id);
-        if (optionalCategory.isPresent()){
-            return ResponseEntity.ok(optionalCategory.orElseThrow());
+    public ResponseEntity<Product> view(@PathVariable Long id){
+        Optional<Product> productOptional  = productService.findById(id);
+        if (productOptional.isPresent()){
+            return ResponseEntity.ok(productOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody Category category, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody Product product, BindingResult result){
         
         if (result.hasFieldErrors()) {
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category){
-        Optional<Category> categoryOptional = this.categoryService.update(id, category);
-        if (categoryOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.CREATED).body(categoryOptional.orElseThrow());
+    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product){
+        Optional<Product> productOptional = this.productService.update(id, product);
+        if (productOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> delete(@PathVariable Long id){
-        //category category = new category();
-        //category.setId(id);
-        Optional<Category> optionalCategory = this.categoryService.delete(id);
-        if (optionalCategory.isPresent()){
-            return ResponseEntity.ok(optionalCategory.orElseThrow());
+    public ResponseEntity<Product> delete(@PathVariable Long id){
+        //product product = new product();
+        //product.setId(id);
+        Optional<Product> productOptional = this.productService.delete(id);
+        if (productOptional.isPresent()){
+            return ResponseEntity.ok(productOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
