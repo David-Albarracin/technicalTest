@@ -46,7 +46,7 @@ public class CategoryService {
         if (optionalcategory.isPresent()) {
             Category categoryItem = optionalcategory.orElseThrow();
             //SETS
-            
+            categoryItem.setNombre(category.getNombre());
             return Optional.of(this.categoryRepository.save(categoryItem));
         }
         return optionalcategory;

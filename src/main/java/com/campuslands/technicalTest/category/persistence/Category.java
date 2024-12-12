@@ -3,6 +3,7 @@ package com.campuslands.technicalTest.category.persistence;
 import java.util.List;
 
 import com.campuslands.technicalTest.product.persistence.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,7 +52,8 @@ public class Category {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
+    @JsonBackReference
     public List<Product> getProductos() {
         return productos;
     }

@@ -2,6 +2,7 @@
 package com.campuslands.technicalTest.category.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,6 +31,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+     @GetMapping
+    // @PreAuthorize("hasRole('ADMIN')")
+    public List<Category> listCategories(){
+        return this.categoryService.findAll();
+    }
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")

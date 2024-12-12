@@ -43,7 +43,10 @@ public class ProductService {
         if (optionalproduct.isPresent()) {
             Product productItem = optionalproduct.orElseThrow();
             // SETS
-
+            productItem.setNombre(product.getNombre());
+            productItem.setDescripcion(product.getDescripcion());
+            productItem.setPrecio(product.getPrecio());
+            productItem.setCategoria(product.getCategoria());
             return Optional.of(this.productRepository.save(productItem));
         }
         return optionalproduct;

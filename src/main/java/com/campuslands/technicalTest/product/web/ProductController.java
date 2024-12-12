@@ -2,6 +2,7 @@
 package com.campuslands.technicalTest.product.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,6 +31,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping
+    // @PreAuthorize("hasRole('ADMIN')")
+    public List<Product> listEmployee(){
+        return this.productService.findAll();
+    }
+
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
@@ -40,6 +47,7 @@ public class ProductController {
         }
         return ResponseEntity.notFound().build();
     }
+    
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
