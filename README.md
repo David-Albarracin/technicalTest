@@ -71,7 +71,7 @@ CREATE TABLE products (
 ```
 
 
-### 2. **Configuración del Archivo `application.properties`**
+### 4. **Configuración del Archivo `application.properties`**
 
 Asegúrate de configurar correctamente la conexión a tu base de datos en el archivo `application.properties` de la aplicación Spring Boot:
 
@@ -84,7 +84,7 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.show-sql=true
 ```
 
-### 3. **Compilar y Ejecutar la Aplicación**
+### 5. **Compilar y Ejecutar la Aplicación**
 
 Para compilar y ejecutar la aplicación, usa los siguientes comandos:
 
@@ -100,14 +100,24 @@ Para compilar y ejecutar la aplicación, usa los siguientes comandos:
 
 ## Endpoints de la API
 
-Utilities Esta carpeta incluye un archivo JSON compatible con Insomnia que contiene todos los endpoints preconfigurados para probar la API.
+/utilities Esta carpeta incluye un archivo JSON compatible con Insomnia que contiene todos los endpoints preconfigurados para probar la API.
 
 ### **Categorías**
 
 - **GET /api/categories**: Listar todas las categorías.
 - **GET /api/categories/{id}**: Obtener una categoría por su ID.
 - **POST /api/categories**: Crear una nueva categoría.
+  ```json
+  {
+    "nombre": "HOGAR"
+  }
+  ```
 - **PUT /api/categories/{id}**: Actualizar una categoría existente.
+  ```json
+  {
+    "nombre": "SONIDO"
+  }
+  ```
 - **DELETE /api/categories/{id}**: Eliminar una categoría por su ID (solo si no tiene productos asociados).
 
 ### **Productos**
@@ -115,7 +125,29 @@ Utilities Esta carpeta incluye un archivo JSON compatible con Insomnia que conti
 - **GET /api/products**: Listar todos los productos (con su categoría).
 - **GET /api/products/{id}**: Obtener un producto por su ID.
 - **POST /api/products**: Crear un nuevo producto.
+  ```json
+  {
+    "nombre": "ASUS G4",
+    "descripcion": "Laptop de alta gama con pantalla de 15 pulgadas",
+    "precio": 2000,
+    "categoria": {
+      "id": 2
+    }
+  }
+  
+  ```
 - **PUT /api/products/{id}**: Actualizar un producto existente.
+   ```json
+  {
+    "nombre": "LENOVO S3",
+    "descripcion": "Laptop de alta gama con pantalla de 15 pulgadas",
+    "precio": 2000,
+    "categoria": {
+      "id": 2
+    }
+  }
+  
+  ```
 - **DELETE /api/products/{id}**: Eliminar un producto por su ID.
 - **GET /api/products/categoria/{categoriaId}**: Listar todos los productos de una categoría específica.
 
