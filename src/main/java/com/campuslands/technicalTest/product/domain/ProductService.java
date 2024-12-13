@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.campuslands.technicalTest.category.domain.CategoryRepository;
+import com.campuslands.technicalTest.category.persistence.Categoria;
 import com.campuslands.technicalTest.product.persistence.Producto;
 
 import jakarta.transaction.Transactional;
@@ -17,6 +19,8 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
     
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Transactional
     public Optional<Producto> delete(Long id) {
@@ -52,10 +56,12 @@ public class ProductService {
             productItem.setPrecio(product.getPrecio());
             if (product.getCategoria() != null) {
                 if (product.getCategoria().getId() != null) {
-                    product.setCategoria(product.getCategoria());
-                }else{
-                    throw new IllegalArgumentException("La categoría debe tener un ID válido.");
+                    Optional<Categoria> categoryOptional = categoryRepository.findById(product.getCategoria().getId());
+                    if (categoryOptional.isPresent()) {
+                        product.setCategoria(product.getCategoria());
+                    }
                 }
+                throw new IllegalArgumentException("La categoría debe tener un ID válido.");
             }
             return Optional.of(this.productRepository.save(productItem));
         }
