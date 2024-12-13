@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.campuslands.technicalTest.category.domain.CategoryService;
 import com.campuslands.technicalTest.category.persistence.Categoria;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 ;
@@ -33,37 +34,39 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-     @GetMapping
+    @GetMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public List<Categoria> listCategories(){
+    public List<Categoria> listCategories() {
         return this.categoryService.findAll();
     }
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Categoria> view(@PathVariable Long id){
-        Optional<Categoria> optionalCategory  = categoryService.findById(id);
-        if (optionalCategory.isPresent()){
+    public ResponseEntity<Categoria> view(@PathVariable Long id) {
+        Optional<Categoria> optionalCategory = categoryService.findById(id);
+        if (optionalCategory.isPresent()) {
             return ResponseEntity.ok(optionalCategory.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException("Categoria no encontrado con id: " + id);
+
     }
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@Valid @RequestBody Categoria category, BindingResult result){
-        
-        // Optional<Categoria> categoria = categoryService.findByNombre(category.getNombre());
+    public ResponseEntity<?> create(@Valid @RequestBody Categoria category, BindingResult result) {
+
+        // Optional<Categoria> categoria =
+        // categoryService.findByNombre(category.getNombre());
         // if (categoria.isPresent()) {
-        //     Map<String, String> response = new HashMap<>();
-        //     response.put("error", "Category already exists");
-        //     response.put("message", "A category with the same name already exists.");
-        //     // Retornar una respuesta BAD_REQUEST con el mapa de error
-        //     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        // Map<String, String> response = new HashMap<>();
+        // response.put("error", "Category already exists");
+        // response.put("message", "A category with the same name already exists.");
+        // // Retornar una respuesta BAD_REQUEST con el mapa de error
+        // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         // }
 
         // if (result.hasFieldErrors()) {
-        //     return validation(result);
+        // return validation(result);
         // }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
@@ -71,32 +74,35 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Categoria> update(@PathVariable Long id,@Valid @RequestBody Categoria category){
+    public ResponseEntity<Categoria> update(@PathVariable Long id, @Valid @RequestBody Categoria category) {
         Optional<Categoria> categoryOptional = this.categoryService.update(id, category);
-        if (categoryOptional.isPresent()){
+        if (categoryOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(categoryOptional.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException("Categoria no encontrado con id: " + id);
+
     }
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Categoria> delete(@PathVariable Long id){
-        //category category = new category();
-        //category.setId(id);
+    public ResponseEntity<Categoria> delete(@PathVariable Long id) {
+        // category category = new category();
+        // category.setId(id);
         Optional<Categoria> optionalCategory = this.categoryService.delete(id);
-        if (optionalCategory.isPresent()){
+        if (optionalCategory.isPresent()) {
             return ResponseEntity.ok(optionalCategory.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException("Categoria no encontrado con id: " + id);
+
     }
 
     // private ResponseEntity<?> validation(BindingResult result) {
-    //     Map<String, String> errors = new HashMap<>();
-    //     result.getFieldErrors().forEach(err -> {
-    //         errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
-    //     });
-    //     return ResponseEntity.badRequest().body(errors);
+    // Map<String, String> errors = new HashMap<>();
+    // result.getFieldErrors().forEach(err -> {
+    // errors.put(err.getField(), "El campo " + err.getField() + " " +
+    // err.getDefaultMessage());
+    // });
+    // return ResponseEntity.badRequest().body(errors);
     // }
 
 }

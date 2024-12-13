@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.campuslands.technicalTest.product.persistence.Producto;
 
@@ -45,9 +46,17 @@ public class ProductService {
             Producto productItem = optionalproduct.orElseThrow();
             // SETS
             productItem.setNombre(product.getNombre());
-            productItem.setDescripcion(product.getDescripcion());
+            if (product.getDescripcion() != null) {
+                productItem.setDescripcion(product.getDescripcion());
+            }
             productItem.setPrecio(product.getPrecio());
-            productItem.setCategoria(product.getCategoria());
+            if (product.getCategoria() != null) {
+                if (product.getCategoria().getId() != null) {
+                    product.setCategoria(product.getCategoria());
+                }else{
+                    throw new IllegalArgumentException("La categoría debe tener un ID válido.");
+                }
+            }
             return Optional.of(this.productRepository.save(productItem));
         }
         return optionalproduct;
