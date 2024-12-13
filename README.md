@@ -22,27 +22,45 @@ Ejecuta el siguiente comando para clonar el repositorio:
 git clone https://github.com/David-Albarracin/technicalTest
 ```
 
-### 3. **Configuración de la Base de Datos**
+### **1. Acceder a PostgreSQL**
 
-Antes de ejecutar la aplicación, asegúrate de tener PostgreSQL configurado y en funcionamiento. A continuación, se proporcionan los comandos DDL necesarios para construir la estructura de la base de datos:
+1. Abre la terminal y accede a PostgreSQL usando tu usuario:
+   ```bash
+   psql -U postgres
+   ```
+2. Ingresa tu contraseña si es necesario.
 
-## Requerimientos
+---
 
-### 1. **Comandos DDL para la Base de Datos**
+### **2. Crear la Base de Datos**
 
-Ejecuta los siguientes comandos SQL para crear las tablas necesarias en la base de datos PostgreSQL:
+Ejecuta el siguiente comando para crear la base de datos:
 
 ```sql
--- Crear la base de datos
 CREATE DATABASE inventory;
+```
 
--- Crear la tabla de categorías
+Para usar esta base de datos:
+```bash
+\c inventory
+```
+
+---
+
+### **3. Crear las Tablas**
+
+Ejecuta los siguientes comandos para crear las tablas necesarias:
+
+#### Crear la Tabla `categories`:
+```sql
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE CHECK (LENGTH(nombre) BETWEEN 3 AND 50)
 );
+```
 
--- Crear la tabla de productos
+#### Crear la Tabla `products`:
+```sql
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL CHECK (LENGTH(nombre) BETWEEN 3 AND 50), 
@@ -52,14 +70,15 @@ CREATE TABLE products (
 );
 ```
 
+
 ### 2. **Configuración del Archivo `application.properties`**
 
 Asegúrate de configurar correctamente la conexión a tu base de datos en el archivo `application.properties` de la aplicación Spring Boot:
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/inventory
-spring.datasource.username=postgres
-spring.datasource.password=root
+spring.datasource.username=your_username
+spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=none
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.show-sql=true
@@ -81,22 +100,24 @@ Para compilar y ejecutar la aplicación, usa los siguientes comandos:
 
 ## Endpoints de la API
 
-La API expone los siguientes endpoints para interactuar con los productos y categorías:
+Utilities Esta carpeta incluye un archivo JSON compatible con Insomnia que contiene todos los endpoints preconfigurados para probar la API.
 
-- **GET /api/categories**: Obtiene todas las categorías.
-- **GET /api/categories/{id}**: Obtiene una categoría por su ID.
-- **POST /api/categories**: Crea una nueva categoría.
-- **PUT /api/categories/{id}**: Actualiza una categoría existente.
-- **DELETE /api/categories/{id}**: Elimina una categoría por su ID.
+### **Categorías**
 
-- **GET /api/products**: Obtiene todos los productos.
-- **GET /api/products/{id}**: Obtiene un producto por su ID.
-- **POST /api/products**: Crea un nuevo producto.
-- **PUT /api/products/{id}**: Actualiza un producto existente.
-- **DELETE /api/products/{id}**: Elimina un producto por su ID.
+- **GET /api/categories**: Listar todas las categorías.
+- **GET /api/categories/{id}**: Obtener una categoría por su ID.
+- **POST /api/categories**: Crear una nueva categoría.
+- **PUT /api/categories/{id}**: Actualizar una categoría existente.
+- **DELETE /api/categories/{id}**: Eliminar una categoría por su ID (solo si no tiene productos asociados).
 
-## Consideraciones Finales
+### **Productos**
 
-- Asegúrate de tener la base de datos correctamente configurada y en funcionamiento antes de ejecutar la aplicación.
-- Los datos se validan en la API para asegurar que los valores sean correctos (por ejemplo, se valida el rango de los precios, la longitud de los nombres y descripciones, etc.).
+- **GET /api/products**: Listar todos los productos (con su categoría).
+- **GET /api/products/{id}**: Obtener un producto por su ID.
+- **POST /api/products**: Crear un nuevo producto.
+- **PUT /api/products/{id}**: Actualizar un producto existente.
+- **DELETE /api/products/{id}**: Eliminar un producto por su ID.
+- **GET /api/products/categoria/{categoriaId}**: Listar todos los productos de una categoría específica.
+
+
 

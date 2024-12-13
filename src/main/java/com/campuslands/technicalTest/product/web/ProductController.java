@@ -57,18 +57,15 @@ public class ProductController {
     }
 
     @PostMapping
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@Valid @RequestBody Producto product, BindingResult result) {
-
-        if (result.hasFieldErrors()) {
-            return validation(result);
-        }
+    public ResponseEntity<?> create(@Valid @RequestBody Producto product) {
+        // Si no hay errores de validación, el flujo llega aquí.
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
+    
 
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Producto> update(@PathVariable Long id, @RequestBody Producto product) {
+    public ResponseEntity<Producto> update(@PathVariable Long id,@Valid @RequestBody Producto product) {
         Optional<Producto> productOptional = this.productService.update(id, product);
         if (productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
@@ -88,13 +85,6 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
-        });
-        return ResponseEntity.badRequest().body(errors);
-    }
 
     @GetMapping("/categoria")
     public ResponseEntity<List<Producto>> getByCategory(@RequestParam("id") Long id) {

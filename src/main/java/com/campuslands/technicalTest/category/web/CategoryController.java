@@ -53,25 +53,25 @@ public class CategoryController {
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody Categoria category, BindingResult result){
         
-        Optional<Categoria> categoria = categoryService.findByNombre(category.getNombre());
-        if (categoria.isPresent()) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", "Category already exists");
-            response.put("message", "A category with the same name already exists.");
-            // Retornar una respuesta BAD_REQUEST con el mapa de error
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        // Optional<Categoria> categoria = categoryService.findByNombre(category.getNombre());
+        // if (categoria.isPresent()) {
+        //     Map<String, String> response = new HashMap<>();
+        //     response.put("error", "Category already exists");
+        //     response.put("message", "A category with the same name already exists.");
+        //     // Retornar una respuesta BAD_REQUEST con el mapa de error
+        //     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        // }
 
-        if (result.hasFieldErrors()) {
-            return validation(result);
-        }
+        // if (result.hasFieldErrors()) {
+        //     return validation(result);
+        // }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
     }
 
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Categoria> update(@PathVariable Long id, @RequestBody Categoria category){
+    public ResponseEntity<Categoria> update(@PathVariable Long id,@Valid @RequestBody Categoria category){
         Optional<Categoria> categoryOptional = this.categoryService.update(id, category);
         if (categoryOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.CREATED).body(categoryOptional.orElseThrow());
@@ -91,12 +91,12 @@ public class CategoryController {
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
-        });
-        return ResponseEntity.badRequest().body(errors);
-    }
+    // private ResponseEntity<?> validation(BindingResult result) {
+    //     Map<String, String> errors = new HashMap<>();
+    //     result.getFieldErrors().forEach(err -> {
+    //         errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
+    //     });
+    //     return ResponseEntity.badRequest().body(errors);
+    // }
 
 }
