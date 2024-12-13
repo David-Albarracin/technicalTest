@@ -2,7 +2,7 @@ package com.campuslands.technicalTest.product.persistence;
 
 import java.math.BigDecimal;
 
-import com.campuslands.technicalTest.category.persistence.Category;
+import com.campuslands.technicalTest.category.persistence.Categoria;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,33 +12,41 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="products")
-public class Product {
+@Table(name="productos")
+public class Producto {
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull()
+    @Size(min = 3, max = 50)
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(length = 255)
+    @Size(max = 255)
+    @Column(nullable = true, length = 255)
     private String descripcion;
 
+    @NotNull()
+    @Positive()
     @Column(nullable = false)
     private BigDecimal precio;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    private Category categoria;
+    private Categoria categoria;
 
     // Constructores
-    public Product() {
+    public Producto() {
     }
 
-    public Product(String nombre, String descripcion, BigDecimal precio, Category categoria) {
+    public Producto(String nombre, String descripcion, BigDecimal precio, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -78,11 +86,11 @@ public class Product {
         this.precio = precio;
     }
 
-    public Category getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Category categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 

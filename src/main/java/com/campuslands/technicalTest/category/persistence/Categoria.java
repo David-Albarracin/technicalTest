@@ -2,7 +2,7 @@ package com.campuslands.technicalTest.category.persistence;
 
 import java.util.List;
 
-import com.campuslands.technicalTest.product.persistence.Product;
+import com.campuslands.technicalTest.product.persistence.Producto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
@@ -13,26 +13,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="categories")
-public class Category {
+@Table(name = "categorias")
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(min = 3, max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String nombre;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> productos;
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
 
     // Constructores
-    public Category() {
+    public Categoria() {
     }
 
-    public Category(String nombre) {
+    public Categoria(String nombre) {
         this.nombre = nombre;
     }
 
@@ -52,14 +56,13 @@ public class Category {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+
     @JsonBackReference
-    public List<Product> getProductos() {
+    public List<Producto> getProductos() {
         return productos;
     }
 
-    public void setProductos(List<Product> productos) {
+    public void setProductos(List<Producto> productos) {
         this.productos = productos;
     }
 }
-

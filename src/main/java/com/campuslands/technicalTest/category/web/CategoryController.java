@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.campuslands.technicalTest.category.domain.CategoryService;
-import com.campuslands.technicalTest.category.persistence.Category;
+import com.campuslands.technicalTest.category.persistence.Categoria;
+
+import jakarta.validation.Valid;
 
 ;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categorias")
 public class CategoryController {
 
     @Autowired
@@ -33,14 +35,14 @@ public class CategoryController {
 
      @GetMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public List<Category> listCategories(){
+    public List<Categoria> listCategories(){
         return this.categoryService.findAll();
     }
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> view(@PathVariable Long id){
-        Optional<Category> optionalCategory  = categoryService.findById(id);
+    public ResponseEntity<Categoria> view(@PathVariable Long id){
+        Optional<Categoria> optionalCategory  = categoryService.findById(id);
         if (optionalCategory.isPresent()){
             return ResponseEntity.ok(optionalCategory.orElseThrow());
         }
@@ -49,18 +51,28 @@ public class CategoryController {
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody Category category, BindingResult result){
+    public ResponseEntity<?> create(@Valid @RequestBody Categoria category, BindingResult result){
         
+        Optional<Categoria> categoria = categoryService.findByNombre(category.getNombre());
+        if (categoria.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Category already exists");
+            response.put("message", "A category with the same name already exists.");
+            // Retornar una respuesta BAD_REQUEST con el mapa de error
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
         if (result.hasFieldErrors()) {
             return validation(result);
         }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
     }
 
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category){
-        Optional<Category> categoryOptional = this.categoryService.update(id, category);
+    public ResponseEntity<Categoria> update(@PathVariable Long id, @RequestBody Categoria category){
+        Optional<Categoria> categoryOptional = this.categoryService.update(id, category);
         if (categoryOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.CREATED).body(categoryOptional.orElseThrow());
         }
@@ -69,10 +81,10 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> delete(@PathVariable Long id){
+    public ResponseEntity<Categoria> delete(@PathVariable Long id){
         //category category = new category();
         //category.setId(id);
-        Optional<Category> optionalCategory = this.categoryService.delete(id);
+        Optional<Categoria> optionalCategory = this.categoryService.delete(id);
         if (optionalCategory.isPresent()){
             return ResponseEntity.ok(optionalCategory.orElseThrow());
         }

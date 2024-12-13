@@ -1,9 +1,11 @@
-CREATE TABLE categories (
+CREATE DATABASE inventory;
+
+CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE CHECK (LENGTH(nombre) BETWEEN 3 AND 50)
 );
 
-CREATE TABLE products (
+CREATE TABLE productos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL CHECK (LENGTH(nombre) BETWEEN 3 AND 50), 
     descripcion VARCHAR(255),

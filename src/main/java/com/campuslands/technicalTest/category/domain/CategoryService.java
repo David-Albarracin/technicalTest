@@ -3,11 +3,10 @@ package com.campuslands.technicalTest.category.domain;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.campuslands.technicalTest.category.persistence.Category;
+import com.campuslands.technicalTest.category.persistence.Categoria;
 
 import jakarta.transaction.Transactional;
 
@@ -17,39 +16,41 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-@Transactional
-    public Optional<Category> delete(Long id) {
-        Optional<Category> optionalcategory = this.categoryRepository.findById(id);
+    @Transactional
+    public Optional<Categoria> delete(Long id) {
+        Optional<Categoria> optionalcategory = this.categoryRepository.findById(id);
         optionalcategory.ifPresent(
-            categoryFound -> {
-                this.categoryRepository.delete(categoryFound);
-            }
-        );
+                categoryFound -> {
+                    this.categoryRepository.delete(categoryFound);
+                });
         return optionalcategory;
     }
- 
-    public List<Category> findAll() {
-        return (List<Category>) this.categoryRepository.findAll();
+
+    public List<Categoria> findAll() {
+        return (List<Categoria>) this.categoryRepository.findAll();
     }
 
-
-    public Optional<Category> findById(Long id) {
+    public Optional<Categoria> findById(Long id) {
         return this.categoryRepository.findById(id);
     }
 
-    public Category save(Category item) {
+    public Categoria save(Categoria item) {
         return this.categoryRepository.save(item);
     }
 
-    public Optional<Category> update(Long id, Category category) {
-        Optional<Category> optionalcategory = this.categoryRepository.findById(id);
+    public Optional<Categoria> update(Long id, Categoria category) {
+        Optional<Categoria> optionalcategory = this.categoryRepository.findById(id);
         if (optionalcategory.isPresent()) {
-            Category categoryItem = optionalcategory.orElseThrow();
-            //SETS
+            Categoria categoryItem = optionalcategory.orElseThrow();
+            // SETS
             categoryItem.setNombre(category.getNombre());
             return Optional.of(this.categoryRepository.save(categoryItem));
         }
         return optionalcategory;
+    }
+
+    public Optional<Categoria> findByNombre(String nombre) {
+        return this.categoryRepository.findByNombre(nombre);
     }
 
 }
